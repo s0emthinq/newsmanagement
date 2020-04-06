@@ -3,7 +3,7 @@ REST API:
 Tag
 
 
-  GET: /tags - get all tags;\r\n
+  GET: /tags - get all tags;
 	GET: /tags/id - get tag by id;
 	POST: /tags - save tag. Tag should be sent using request-body in appropriate JSON-format;
 	PUT: /tags - update tag. Tag should be sent using request-body in appropriate JSON-format;
