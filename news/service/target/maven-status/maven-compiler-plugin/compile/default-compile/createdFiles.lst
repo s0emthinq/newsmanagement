@@ -1,0 +1,14 @@
+com\epam\lab\dto\TagDto.class
+com\epam\lab\dto\AuthorDto.class
+com\epam\lab\configuration\ModelMapperConfiguration.class
+com\epam\lab\service\AuthorService.class
+com\epam\lab\service\NewsService.class
+com\epam\lab\service\TagService.class
+com\epam\lab\dto\BaseDto.class
+com\epam\lab\exception\EntityAlreadyExistsException.class
+com\epam\lab\service\BaseService.class
+com\epam\lab\dto\NewsDto.class
+com\epam\lab\service\impl\NewsServiceImpl.class
+com\epam\lab\service\impl\TagServiceImpl.class
+com\epam\lab\service\impl\AuthorServiceImpl.class
+com\epam\lab\exception\NoSuchEntityException.class

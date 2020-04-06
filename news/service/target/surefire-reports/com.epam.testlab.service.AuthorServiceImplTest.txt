@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.epam.testlab.service.AuthorServiceImplTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 15.4 s - in com.epam.testlab.service.AuthorServiceImplTest

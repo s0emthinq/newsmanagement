@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TagDaoImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">repository-jpa</a> &gt; <a href="index.source.html" class="el_package">com.epam.lab.repository.impl</a> &gt; <span class="el_source">TagDaoImpl.java</span></div><h1>TagDaoImpl.java</h1><pre class="source lang-java linenums">package com.epam.lab.repository.impl;
+
+import com.epam.lab.exception.DaoException;
+import com.epam.lab.model.Tag;
+import com.epam.lab.repository.TagDao;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
+import java.util.HashSet;
+import java.util.Set;
+
+@Repository
+<span class="fc" id="L17">public class TagDaoImpl implements TagDao {</span>
+
+    public static final String TABLE_NAME_TAG = &quot;tag&quot;;
+    public static final String CLM_NAME_ID = &quot;id&quot;;
+    public static final String CLM_NAME_NAME = &quot;name&quot;;
+
+    private static final String JPQL_READ_ALL_TAGS = &quot;select t from Tag t&quot;;
+    private static final String JPQL_DELETE_TAG_BY_ID = &quot;delete from Tag where id = :id&quot;;
+    private static final String JPQL_FIND_TAG_BY_ID = &quot;select t from Tag t where id = :id&quot;;
+    private static final String JPQL_FIND_TAG_BY_NAME = &quot;select t from Tag t where name = :name&quot;;
+
+    private static final String ERROR_500_MESSAGE = &quot;Oops, something went wrong on the server :( Please, try later.&quot;;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Override
+    @Transactional
+    public boolean create(Tag tag) {
+        try {
+<span class="fc" id="L37">            entityManager.persist(tag);</span>
+<span class="fc" id="L38">            return true;</span>
+<span class="nc" id="L39">        } catch (PersistenceException e) {</span>
+<span class="nc" id="L40">            throw new DaoException(ERROR_500_MESSAGE, e);</span>
+        }
+    }
+
+    @Override
+    public Tag findById(Long id) {
+<span class="fc" id="L46">        return entityManager.find(Tag.class, id);</span>
+    }
+
+    @Override
+    public Set&lt;Tag&gt; readAll() {
+        try {
+<span class="fc" id="L52">            return new HashSet&lt;Tag&gt;(entityManager.createQuery(JPQL_READ_ALL_TAGS).getResultList());</span>
+<span class="nc" id="L53">        } catch (PersistenceException e) {</span>
+<span class="nc" id="L54">            throw new DaoException(ERROR_500_MESSAGE, e);</span>
+        }
+    }
+
+    @Override
+    @Transactional
+    public Tag update(Tag tag) {
+        try {
+<span class="fc" id="L62">            return entityManager.merge(tag);</span>
+<span class="nc" id="L63">        } catch (PersistenceException e) {</span>
+<span class="nc" id="L64">            throw new DaoException(ERROR_500_MESSAGE, e);</span>
+        }
+    }
+
+    @Override
+    @Transactional
+    public boolean delete(Tag tag) {
+        try {
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">            entityManager.remove(entityManager.contains(tag) ? tag : entityManager.merge(tag));</span>
+<span class="fc" id="L73">            return true;</span>
+<span class="nc" id="L74">        } catch (PersistenceException e) {</span>
+<span class="nc" id="L75">            throw new DaoException(ERROR_500_MESSAGE, e);</span>
+        }
+    }
+
+    @Override
+    @Transactional
+    public boolean delete(Long id) {
+        try {
+<span class="nc bnc" id="L83" title="All 2 branches missed.">            return entityManager.createQuery(JPQL_DELETE_TAG_BY_ID).setParameter(CLM_NAME_ID, id).executeUpdate() == 1;</span>
+<span class="nc" id="L84">        } catch (PersistenceException e) {</span>
+<span class="nc" id="L85">            throw new DaoException(ERROR_500_MESSAGE, e);</span>
+        }
+    }
+
+    @Override
+    public boolean isExist(Long id) {
+        try {
+<span class="nc" id="L92">            entityManager.createQuery(JPQL_FIND_TAG_BY_ID).setParameter(CLM_NAME_ID, id).getSingleResult();</span>
+<span class="nc" id="L93">            return true;</span>
+<span class="nc" id="L94">        } catch (NoResultException e) {</span>
+<span class="nc" id="L95">            return false;</span>
+        }
+    }
+
+    @Override
+    public boolean isExist(Tag tag) {
+        try {
+<span class="fc" id="L102">            entityManager.createQuery(JPQL_FIND_TAG_BY_NAME).setParameter(CLM_NAME_NAME, tag.getName()).getSingleResult();</span>
+<span class="fc" id="L103">            return true;</span>
+<span class="fc" id="L104">        } catch (NoResultException e) {</span>
+<span class="fc" id="L105">            return false;</span>
+        }
+    }
+
+    @Override
+    public boolean isNotExist(Tag tag) {
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        return !isExist(tag);</span>
+    }
+
+    @Override
+    public boolean isNotExist(Long id) {
+<span class="nc bnc" id="L116" title="All 2 branches missed.">        return !isExist(id);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

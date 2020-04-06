@@ -1,0 +1,14 @@
+D:\java-lab\news\repository-jpa\src\main\java\com\epam\lab\model\Tag.java
+D:\java-lab\news\repository-jpa\src\main\java\com\epam\lab\repository\TagDao.java
+D:\java-lab\news\repository-jpa\src\main\java\com\epam\lab\model\BaseEntity.java
+D:\java-lab\news\repository-jpa\src\main\java\com\epam\lab\configuration\DatabaseConfigurator.java
+D:\java-lab\news\repository-jpa\src\main\java\com\epam\lab\repository\BaseDao.java
+D:\java-lab\news\repository-jpa\src\main\java\com\epam\lab\repository\NewsDao.java
+D:\java-lab\news\repository-jpa\src\main\java\com\epam\lab\model\Author.java
+D:\java-lab\news\repository-jpa\src\main\java\com\epam\lab\model\News.java
+D:\java-lab\news\repository-jpa\src\main\java\com\epam\lab\model\SearchCriteria.java
+D:\java-lab\news\repository-jpa\src\main\java\com\epam\lab\repository\impl\AuthorDaoImpl.java
+D:\java-lab\news\repository-jpa\src\main\java\com\epam\lab\repository\AuthorDao.java
+D:\java-lab\news\repository-jpa\src\main\java\com\epam\lab\repository\impl\TagDaoImpl.java
+D:\java-lab\news\repository-jpa\src\main\java\com\epam\lab\exception\DaoException.java
+D:\java-lab\news\repository-jpa\src\main\java\com\epam\lab\repository\impl\NewsDaoImpl.java

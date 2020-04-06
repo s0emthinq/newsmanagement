@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NewsServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">service</a> &gt; <a href="index.source.html" class="el_package">com.epam.lab.service.impl</a> &gt; <span class="el_source">NewsServiceImpl.java</span></div><h1>NewsServiceImpl.java</h1><pre class="source lang-java linenums">package com.epam.lab.service.impl;
+
+import com.epam.lab.dto.NewsDto;
+import com.epam.lab.exception.EntityAlreadyExistsException;
+import com.epam.lab.exception.NoSuchEntityException;
+import com.epam.lab.model.Author;
+import com.epam.lab.model.News;
+import com.epam.lab.model.SearchCriteria;
+import com.epam.lab.model.Tag;
+import com.epam.lab.repository.AuthorDao;
+import com.epam.lab.repository.NewsDao;
+import com.epam.lab.repository.TagDao;
+import com.epam.lab.service.NewsService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.*;
+
+@Service
+public class NewsServiceImpl implements NewsService {
+
+    private NewsDao newsDao;
+    private TagDao tagDao;
+    private AuthorDao authorDao;
+    private ModelMapper modelMapper;
+
+    @Autowired
+<span class="fc" id="L30">    public NewsServiceImpl(NewsDao newsDao, AuthorDao authorDao, TagDao tagDao, ModelMapper modelMapper) {</span>
+<span class="fc" id="L31">        this.newsDao = newsDao;</span>
+<span class="fc" id="L32">        this.authorDao = authorDao;</span>
+<span class="fc" id="L33">        this.tagDao = tagDao;</span>
+<span class="fc" id="L34">        this.modelMapper = modelMapper;</span>
+<span class="fc" id="L35">    }</span>
+
+    @Override
+    public boolean create(NewsDto newsDto) {
+<span class="fc" id="L39">        News news = convertToEntity(newsDto);</span>
+<span class="fc" id="L40">        news.setCreationDate(LocalDate.now());</span>
+<span class="fc" id="L41">        news.setModificationDate(LocalDate.now());</span>
+
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        if (newsDao.isNotExist(news)) {</span>
+<span class="fc" id="L44">            return newsDao.create(news);</span>
+        } else {
+<span class="nc" id="L46">            throw new EntityAlreadyExistsException(&quot;Can't create news&quot; + news + &quot; because this news already exists&quot;);</span>
+        }
+    }
+
+    @Override
+    public NewsDto findById(Long id) {
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        if (newsDao.isExist(id)) {</span>
+<span class="fc" id="L53">            return convertToDto(newsDao.findById(id));</span>
+        } else {
+<span class="nc" id="L55">            throw new NoSuchEntityException(&quot;No news found with id = &quot; + id);</span>
+        }
+    }
+
+    @Override
+    public Collection&lt;NewsDto&gt; readAll() {
+<span class="nc" id="L61">        Set&lt;NewsDto&gt; newsDtos = new HashSet&lt;&gt;();</span>
+<span class="nc" id="L62">        Collection&lt;News&gt; newsList = newsDao.readAll();</span>
+<span class="nc" id="L63">        newsList.forEach(news -&gt; {</span>
+<span class="nc" id="L64">            NewsDto newsDto = convertToDto(news);</span>
+<span class="nc" id="L65">            newsDtos.add(newsDto);</span>
+<span class="nc" id="L66">        });</span>
+<span class="nc" id="L67">        return newsDtos;</span>
+    }
+
+    @Override
+    public NewsDto update(NewsDto newsDto) {
+<span class="fc" id="L72">        Long id = newsDto.getId();</span>
+<span class="fc" id="L73">        News news = convertToEntity(newsDto);</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        if (newsDao.isExist(id)) { // if news with given id exists</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">            if (newsDao.isNotExist(news)) { // if news with given title and full text doesn't already exist</span>
+<span class="fc" id="L76">                return convertToDto(newsDao.update(news));</span>
+            } else {
+<span class="nc" id="L78">                throw new EntityAlreadyExistsException(&quot;Can't update news with id &quot;</span>
+                        + id + &quot; because news with title = &quot;
+<span class="nc" id="L80">                        + news.getTitle() + &quot; and full text = &quot;</span>
+<span class="nc" id="L81">                        + news.getFullText() + &quot; already exists&quot;);</span>
+            }
+        } else {
+<span class="nc" id="L84">            throw new NoSuchEntityException(&quot;No news found with id = &quot; + id + &quot; to update&quot;);</span>
+        }
+    }
+
+    @Override
+    public boolean delete(NewsDto newsDto) {
+<span class="nc" id="L90">        Long id = newsDto.getId();</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (newsDao.isExist(id)) {</span>
+<span class="nc" id="L92">            return newsDao.delete(convertToEntity(newsDto));</span>
+        } else {
+<span class="nc" id="L94">            throw new NoSuchEntityException(&quot;No news found with id = &quot; + id + &quot; to delete&quot;);</span>
+        }
+    }
+
+    @Override
+    public boolean delete(Long id) {
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if (newsDao.isExist(id)) {</span>
+<span class="fc" id="L101">            return newsDao.delete(id);</span>
+        } else {
+<span class="nc" id="L103">            throw new NoSuchEntityException(&quot;No news found with id = &quot; + id + &quot; to delete&quot;);</span>
+        }
+    }
+
+    @Override
+    public List&lt;NewsDto&gt; sort(SearchCriteria searchCriteria) {
+<span class="nc" id="L109">        Set&lt;News&gt; newsList = newsDao.sort(searchCriteria);</span>
+<span class="nc" id="L110">        List&lt;NewsDto&gt; newsDtos = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L111">        newsList.forEach(news -&gt; {</span>
+<span class="nc" id="L112">            NewsDto newsDto = convertToDto(news);</span>
+<span class="nc" id="L113">            newsDtos.add(newsDto);</span>
+<span class="nc" id="L114">        });</span>
+<span class="nc" id="L115">        return newsDtos;</span>
+    }
+
+    @Override
+    public NewsDto convertToDto(News news) {
+<span class="fc" id="L120">        return modelMapper.map(news, NewsDto.class);</span>
+    }
+
+    @Override
+    public News convertToEntity(NewsDto newsDto) {
+<span class="fc" id="L125">        return modelMapper.map(newsDto, News.class);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

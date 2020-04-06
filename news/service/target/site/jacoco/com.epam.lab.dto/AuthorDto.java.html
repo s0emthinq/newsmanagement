@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthorDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">service</a> &gt; <a href="index.source.html" class="el_package">com.epam.lab.dto</a> &gt; <span class="el_source">AuthorDto.java</span></div><h1>AuthorDto.java</h1><pre class="source lang-java linenums">package com.epam.lab.dto;
+
+import java.util.Objects;
+
+public class AuthorDto extends BaseDto {
+    private Long id;
+    private String name;
+    private String surname;
+
+<span class="fc" id="L10">    public AuthorDto() {</span>
+<span class="fc" id="L11">    }</span>
+
+<span class="fc" id="L13">    public AuthorDto(Long id, String name, String surname) {</span>
+<span class="fc" id="L14">        this.id = id;</span>
+<span class="fc" id="L15">        this.name = name;</span>
+<span class="fc" id="L16">        this.surname = surname;</span>
+<span class="fc" id="L17">    }</span>
+
+<span class="fc" id="L19">    public AuthorDto(String name, String surname) {</span>
+<span class="fc" id="L20">        this.name = name;</span>
+<span class="fc" id="L21">        this.surname = surname;</span>
+<span class="fc" id="L22">    }</span>
+
+    public Long getId() {
+<span class="fc" id="L25">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="fc" id="L29">        this.id = id;</span>
+<span class="fc" id="L30">    }</span>
+
+    public String getName() {
+<span class="fc" id="L33">        return name;</span>
+    }
+
+    public void setName(String name) {
+<span class="fc" id="L37">        this.name = name;</span>
+<span class="fc" id="L38">    }</span>
+
+    public String getSurname() {
+<span class="fc" id="L41">        return surname;</span>
+    }
+
+    public void setSurname(String surname) {
+<span class="fc" id="L45">        this.surname = surname;</span>
+<span class="fc" id="L46">    }</span>
+
+
+    @Override
+    public boolean equals(Object o) {
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (this == o) return true;</span>
+<span class="pc bpc" id="L52" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="fc" id="L53">        AuthorDto authorDto = (AuthorDto) o;</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        return Objects.equals(name, authorDto.name) &amp;&amp;</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">                Objects.equals(surname, authorDto.surname);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L60">        return Objects.hash(name, surname);</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L65">        final StringBuilder sb = new StringBuilder(&quot;AuthorDto{&quot;);</span>
+<span class="nc" id="L66">        sb.append(&quot;id=&quot;).append(id);</span>
+<span class="nc" id="L67">        sb.append(&quot;, name='&quot;).append(name).append('\'');</span>
+<span class="nc" id="L68">        sb.append(&quot;, surname='&quot;).append(surname).append('\'');</span>
+<span class="nc" id="L69">        sb.append('}');</span>
+<span class="nc" id="L70">        return sb.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

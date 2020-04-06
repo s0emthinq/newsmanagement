@@ -1,0 +1,7 @@
+com\epam\lab\controller\AuthorController.class
+com\epam\lab\controller\TagController.class
+com\epam\lab\exception\Message.class
+com\epam\lab\controller\NewsController.class
+com\epam\lab\exception\NewsResponseEntityExceptionHandler.class
+com\epam\lab\configuration\WebAppInitializer.class
+com\epam\lab\configuration\ApplicationContextConfig.class

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DatabaseConfigurator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">repository-jpa</a> &gt; <a href="index.source.html" class="el_package">com.epam.lab.configuration</a> &gt; <span class="el_source">DatabaseConfigurator.java</span></div><h1>DatabaseConfigurator.java</h1><pre class="source lang-java linenums">package com.epam.lab.configuration;
+
+import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
+import java.util.Properties;
+
+@Configuration
+@ComponentScan(&quot;com.epam.lab&quot;)
+@PropertySource(&quot;classpath:database.properties&quot;)
+@EnableTransactionManagement()
+<span class="nc" id="L25">public class DatabaseConfigurator {</span>
+
+    private static final String PACKAGES_TO_SCAN = &quot;com.epam.lab.model&quot;;
+    private static final String PROPERTY_NAME_USER = &quot;jdbc.user&quot;;
+    private static final String PROPERTY_NAME_PASSWORD = &quot;jdbc.password&quot;;
+    private static final String PROPERTY_NAME_URL = &quot;jdbc.url&quot;;
+    private static final String PROPERTY_NAME_DRIVER = &quot;jdbc.driverClassName&quot;;
+    private static final String PROPERTY_NAME_DIALECT = &quot;hibernate.dialect&quot;;
+    private static final String PROPERTY_NAME_SHOW_SQL = &quot;hibernate.show_sql&quot;;
+
+    @Autowired
+    private Environment environment;
+
+    @Bean
+    public Properties hibernateProperties() {
+<span class="nc" id="L40">        Properties properties = new Properties();</span>
+<span class="nc" id="L41">        properties.setProperty(PROPERTY_NAME_DIALECT, environment.getProperty(PROPERTY_NAME_DIALECT));</span>
+<span class="nc" id="L42">        properties.setProperty(PROPERTY_NAME_SHOW_SQL, environment.getProperty(PROPERTY_NAME_SHOW_SQL));</span>
+<span class="nc" id="L43">        return properties;</span>
+    }
+
+    @Bean(destroyMethod = &quot;close&quot;)
+    public DataSource dataSource() {
+<span class="nc" id="L48">        HikariDataSource dataSource = new HikariDataSource();</span>
+<span class="nc" id="L49">        dataSource.setUsername(environment.getProperty(PROPERTY_NAME_USER));</span>
+<span class="nc" id="L50">        dataSource.setPassword(environment.getProperty(PROPERTY_NAME_PASSWORD));</span>
+<span class="nc" id="L51">        dataSource.setJdbcUrl(environment.getProperty(PROPERTY_NAME_URL));</span>
+<span class="nc" id="L52">        dataSource.setDriverClassName(environment.getProperty(PROPERTY_NAME_DRIVER));</span>
+<span class="nc" id="L53">        return dataSource;</span>
+    }
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
+<span class="nc" id="L58">        LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();</span>
+<span class="nc" id="L59">        entityManagerFactory.setDataSource(dataSource);</span>
+<span class="nc" id="L60">        entityManagerFactory.setPackagesToScan(PACKAGES_TO_SCAN);</span>
+<span class="nc" id="L61">        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();</span>
+<span class="nc" id="L62">        entityManagerFactory.setJpaVendorAdapter(vendorAdapter);</span>
+<span class="nc" id="L63">        entityManagerFactory.setJpaProperties(hibernateProperties());</span>
+<span class="nc" id="L64">        return entityManagerFactory;</span>
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+<span class="nc" id="L69">        JpaTransactionManager transactionManager = new JpaTransactionManager();</span>
+<span class="nc" id="L70">        transactionManager.setEntityManagerFactory(entityManagerFactory);</span>
+<span class="nc" id="L71">        return transactionManager;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

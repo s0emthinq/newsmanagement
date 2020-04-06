@@ -1,0 +1,11 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+service,com.epam.lab.exception,NoSuchEntityException,12,4,0,0,6,2,3,1,3,1
+service,com.epam.lab.exception,EntityAlreadyExistsException,12,4,0,0,6,2,3,1,3,1
+service,com.epam.lab.configuration,ModelMapperConfiguration,0,7,0,0,0,2,0,2,0,2
+service,com.epam.lab.dto,AuthorDto,56,73,5,5,7,25,7,10,2,10
+service,com.epam.lab.dto,TagDto,47,45,3,3,9,15,6,7,3,7
+service,com.epam.lab.dto,NewsDto,152,134,10,10,23,42,15,18,5,18
+service,com.epam.lab.dto,BaseDto,0,3,0,0,0,1,0,1,0,1
+service,com.epam.lab.service.impl,AuthorServiceImpl,129,93,7,5,17,19,9,7,3,7
+service,com.epam.lab.service.impl,TagServiceImpl,84,130,4,8,13,22,6,10,3,7
+service,com.epam.lab.service.impl,NewsServiceImpl,156,97,7,5,25,22,11,7,5,7

@@ -1,0 +1,14 @@
+com\epam\lab\repository\BaseDao.class
+com\epam\lab\repository\impl\AuthorDaoImpl.class
+com\epam\lab\repository\NewsDao.class
+com\epam\lab\model\Author.class
+com\epam\lab\configuration\DatabaseConfigurator.class
+com\epam\lab\model\News.class
+com\epam\lab\model\Tag.class
+com\epam\lab\repository\AuthorDao.class
+com\epam\lab\repository\impl\NewsDaoImpl.class
+com\epam\lab\repository\impl\TagDaoImpl.class
+com\epam\lab\repository\TagDao.class
+com\epam\lab\model\BaseEntity.class
+com\epam\lab\exception\DaoException.class
+com\epam\lab\model\SearchCriteria.class

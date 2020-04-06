@@ -1,0 +1,14 @@
+D:\java-lab\news\service\src\main\java\com\epam\lab\service\AuthorService.java
+D:\java-lab\news\service\src\main\java\com\epam\lab\service\impl\TagServiceImpl.java
+D:\java-lab\news\service\src\main\java\com\epam\lab\service\impl\NewsServiceImpl.java
+D:\java-lab\news\service\src\main\java\com\epam\lab\dto\TagDto.java
+D:\java-lab\news\service\src\main\java\com\epam\lab\dto\NewsDto.java
+D:\java-lab\news\service\src\main\java\com\epam\lab\exception\NoSuchEntityException.java
+D:\java-lab\news\service\src\main\java\com\epam\lab\service\TagService.java
+D:\java-lab\news\service\src\main\java\com\epam\lab\dto\AuthorDto.java
+D:\java-lab\news\service\src\main\java\com\epam\lab\dto\BaseDto.java
+D:\java-lab\news\service\src\main\java\com\epam\lab\exception\EntityAlreadyExistsException.java
+D:\java-lab\news\service\src\main\java\com\epam\lab\service\impl\AuthorServiceImpl.java
+D:\java-lab\news\service\src\main\java\com\epam\lab\configuration\ModelMapperConfiguration.java
+D:\java-lab\news\service\src\main\java\com\epam\lab\service\BaseService.java
+D:\java-lab\news\service\src\main\java\com\epam\lab\service\NewsService.java

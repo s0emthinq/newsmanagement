@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthorDaoImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">repository-jpa</a> &gt; <a href="index.source.html" class="el_package">com.epam.lab.repository.impl</a> &gt; <span class="el_source">AuthorDaoImpl.java</span></div><h1>AuthorDaoImpl.java</h1><pre class="source lang-java linenums">package com.epam.lab.repository.impl;
+
+import com.epam.lab.exception.DaoException;
+import com.epam.lab.model.Author;
+import com.epam.lab.repository.AuthorDao;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
+import java.util.HashSet;
+import java.util.Set;
+
+@Repository
+<span class="fc" id="L17">public class AuthorDaoImpl implements AuthorDao {</span>
+
+    public static final String TABLE_NAME_AUTHOR = &quot;author&quot;;
+    public static final String CLM_NAME_ID = &quot;id&quot;;
+    public static final String CLM_NAME_NAME = &quot;name&quot;;
+    public static final String CLM_NAME_SURNAME = &quot;surname&quot;;
+
+    private static final String JPQL_READ_ALL_AUTHORS = &quot;select a from Author a&quot;;
+    private static final String JPQL_DELETE_AUTHOR_BY_ID = &quot;delete from Author where id = :id&quot;;
+    private static final String JPQL_FIND_AUTHOR_BY_ID = &quot;select a from Author a where id = :id&quot;;
+    private static final String JPQL_FIND_AUTHOR_BY_NAME_AND_SURNAME
+            = &quot;select a from Author a where name = :name and surname = :surname&quot;;
+
+    private static final String ERROR_500_MESSAGE = &quot;Oops, something went wrong on the server :( Please, try later.&quot;;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Override
+    @Transactional
+    public boolean create(Author author) {
+        try {
+<span class="fc" id="L39">            entityManager.persist(author);</span>
+<span class="fc" id="L40">            return true;</span>
+<span class="nc" id="L41">        } catch (PersistenceException e) {</span>
+<span class="nc" id="L42">            throw new DaoException(ERROR_500_MESSAGE, e);</span>
+        }
+    }
+
+    @Override
+    public Author findById(Long id) {
+<span class="fc" id="L48">            return entityManager.find(Author.class, id);</span>
+    }
+
+    @Override
+    public Set&lt;Author&gt; readAll() {
+        try {
+<span class="fc" id="L54">            return new HashSet&lt;Author&gt;(entityManager.createQuery(JPQL_READ_ALL_AUTHORS).getResultList());</span>
+<span class="nc" id="L55">        } catch (PersistenceException e) {</span>
+<span class="nc" id="L56">            throw new DaoException(ERROR_500_MESSAGE, e);</span>
+        }
+    }
+
+    @Override
+    @Transactional
+    public Author update(Author author) {
+        try {
+<span class="fc" id="L64">            return entityManager.merge(author);</span>
+<span class="nc" id="L65">        } catch (PersistenceException e) {</span>
+<span class="nc" id="L66">            throw new DaoException(ERROR_500_MESSAGE, e);</span>
+        }
+    }
+
+    @Override
+    @Transactional
+    public boolean delete(Author author) {
+        try {
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">            entityManager.remove(entityManager.contains(author) ? author : entityManager.merge(author));</span>
+<span class="fc" id="L75">            return true;</span>
+<span class="nc" id="L76">        } catch (PersistenceException e) {</span>
+<span class="nc" id="L77">            throw new DaoException(ERROR_500_MESSAGE, e);</span>
+        }
+    }
+
+    @Override
+    @Transactional
+    public boolean delete(Long id) {
+        try {
+<span class="nc" id="L85">            return entityManager.createQuery(JPQL_DELETE_AUTHOR_BY_ID)</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">                    .setParameter(CLM_NAME_ID, id).executeUpdate() == 1;</span>
+<span class="nc" id="L87">        } catch (PersistenceException e) {</span>
+<span class="nc" id="L88">            throw new DaoException(ERROR_500_MESSAGE, e);</span>
+        }
+    }
+
+    @Override
+    public boolean isExist(Long id) {
+        try {
+<span class="nc" id="L95">            entityManager.createQuery(JPQL_FIND_AUTHOR_BY_ID).setParameter(CLM_NAME_ID, id).getSingleResult();</span>
+<span class="nc" id="L96">            return true;</span>
+<span class="nc" id="L97">        } catch (NoResultException e) {</span>
+<span class="nc" id="L98">            return false;</span>
+        }
+    }
+
+    @Override
+    public boolean isExist(Author author) {
+        try {
+<span class="fc" id="L105">            entityManager.createQuery(JPQL_FIND_AUTHOR_BY_NAME_AND_SURNAME)</span>
+<span class="fc" id="L106">                    .setParameter(CLM_NAME_NAME, author.getName())</span>
+<span class="fc" id="L107">                    .setParameter(CLM_NAME_SURNAME, author.getSurname())</span>
+<span class="fc" id="L108">                    .getSingleResult();</span>
+<span class="fc" id="L109">            return true;</span>
+<span class="fc" id="L110">        } catch (NoResultException e) {</span>
+<span class="fc" id="L111">            return false;</span>
+        }
+    }
+
+    @Override
+    public boolean isNotExist(Author author) {
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        return !isExist(author);</span>
+    }
+
+    @Override
+    public boolean isNotExist(Long id) {
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        return !isExist(id);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

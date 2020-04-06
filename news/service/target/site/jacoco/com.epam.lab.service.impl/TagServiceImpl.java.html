@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TagServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">service</a> &gt; <a href="index.source.html" class="el_package">com.epam.lab.service.impl</a> &gt; <span class="el_source">TagServiceImpl.java</span></div><h1>TagServiceImpl.java</h1><pre class="source lang-java linenums">package com.epam.lab.service.impl;
+
+import com.epam.lab.dto.TagDto;
+import com.epam.lab.exception.EntityAlreadyExistsException;
+import com.epam.lab.exception.NoSuchEntityException;
+import com.epam.lab.model.Tag;
+import com.epam.lab.repository.TagDao;
+import com.epam.lab.service.TagService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+@Service
+public class TagServiceImpl implements TagService {
+
+    private TagDao tagDao;
+    private ModelMapper modelMapper;
+
+    @Autowired
+<span class="fc" id="L24">    public TagServiceImpl(TagDao tagDao, ModelMapper modelMapper) {</span>
+<span class="fc" id="L25">        this.tagDao = tagDao;</span>
+<span class="fc" id="L26">        this.modelMapper = modelMapper;</span>
+<span class="fc" id="L27">    }</span>
+
+    @Override
+    public boolean create(TagDto tagDto) {
+<span class="fc" id="L31">        Tag tag = convertToEntity(tagDto);</span>
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">        if (tagDao.isNotExist(tag)) {</span>
+<span class="fc" id="L33">            return tagDao.create(tag);</span>
+        } else {
+<span class="nc" id="L35">            throw new EntityAlreadyExistsException(&quot;Can't create &quot;</span>
+                    + tag + &quot;because tag with name = &quot;
+<span class="nc" id="L37">                    + tag.getName() + &quot; already exists&quot;);</span>
+        }
+    }
+
+    @Override
+    public TagDto findById(Long id) {
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (tagDao.isExist(id)) {</span>
+<span class="fc" id="L44">            return convertToDto(tagDao.findById(id));</span>
+        } else {
+<span class="fc" id="L46">            throw new NoSuchEntityException(&quot;Not tag found with id = &quot; + id);</span>
+        }
+    }
+
+    @Override
+    public Collection&lt;TagDto&gt; readAll() {
+<span class="nc" id="L52">        Collection&lt;Tag&gt; tags = tagDao.readAll();</span>
+<span class="nc" id="L53">        Set&lt;TagDto&gt; tagDtos = new HashSet&lt;&gt;();</span>
+<span class="nc" id="L54">        tags.forEach(tag -&gt; {</span>
+<span class="nc" id="L55">            tagDtos.add(convertToDto(tag));</span>
+<span class="nc" id="L56">        });</span>
+<span class="nc" id="L57">        return tagDtos;</span>
+    }
+
+    @Override
+    public TagDto update(TagDto tagDto) {
+<span class="fc" id="L62">        Long id = tagDto.getId();</span>
+<span class="fc" id="L63">        Tag tag = convertToEntity(tagDto);</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (tagDao.isExist(id)) {  // if tag with given id exists</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">            if (tagDao.isNotExist(tag)) { // if a tag with given name doesn't already exist</span>
+<span class="fc" id="L66">                return convertToDto(tagDao.update(tag));</span>
+            } else {
+<span class="nc" id="L68">                throw new EntityAlreadyExistsException(&quot;Can't update tags name with id = &quot;</span>
+                        + id + &quot; because tag with name = &quot;
+<span class="nc" id="L70">                        + tag.getName() + &quot;already exists&quot; );</span>
+            }
+        } else {
+<span class="fc" id="L73">            throw new NoSuchEntityException(&quot;Not tag with id = &quot; + id + &quot; to update.&quot;);</span>
+        }
+    }
+
+    @Override
+    public boolean delete(TagDto tagDto) {
+<span class="fc" id="L79">        Long id = tagDto.getId();</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (tagDao.isExist(id)) {</span>
+<span class="fc" id="L81">            return tagDao.delete(convertToEntity(tagDto));</span>
+        } else {
+<span class="fc" id="L83">            throw new NoSuchEntityException(&quot;Not tag with id = &quot; + id + &quot; to delete.&quot;);</span>
+        }
+    }
+
+    @Override
+    public boolean delete(Long id) {
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        if (tagDao.isExist(id)) {</span>
+<span class="nc" id="L90">            return tagDao.delete(id);</span>
+        } else {
+<span class="nc" id="L92">            throw new NoSuchEntityException(&quot;Not tag with id = &quot; + id + &quot; to delete.&quot;);</span>
+        }
+    }
+
+    @Override
+    public TagDto convertToDto(Tag tag) {
+<span class="fc" id="L98">        return modelMapper.map(tag, TagDto.class);</span>
+    }
+
+    @Override
+    public Tag convertToEntity(TagDto tagDto) {
+<span class="fc" id="L103">        return modelMapper.map(tagDto, Tag.class);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
